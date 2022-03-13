@@ -1,0 +1,54 @@
+version: '3'
+services:
+  listing-service:
+    build: ./listing-service
+    restart: always
+    hostname: listing-service
+    env_file:
+      - .env
+    networks:
+      - backend
+    links:
+      - db-listing
+      - log-service
+    ports:
+      - ${LISTING_SERVICE_PORT}:${LISTING_SERVICE_PORT}
+  log-service:
+    build: ./log-service
+    restart: always
+    hostname: log-service
+    env_file:
+      - .env
+    networks:
+      - backend
+    links:
+      - db
+    ports:
+      - ${LOG_SERVICE_PORT}:${LOG_SERVICE_PORT}
+  db-listing:
+    image: 'mongo:3.7'
+    restart: always
+    hostname: db
+    environment:
+      MONGO_INITDB_DATABASE: ${MONGO_DATABASE}
+    volumes:
+      - "./database/listing/init/:/docker-entrypoint-initdb.d/"
+    networks:
+      - backend
+    ports:
+      - 27017:27017
+  db-user-experience:
+    image: 'mongo:3.7'
+    restart: always
+    hostname: db
+    environment:
+      MONGO_INITDB_DATABASE: ${MONGO_DATABASE}
+    volumes:
+      - "./database/user-experience/init/:/docker-entrypoint-initdb.d/"
+    networks:
+      - backend
+    ports:
+      - 27018:27017
+networks:
+  backend:
+    driver: bridge
