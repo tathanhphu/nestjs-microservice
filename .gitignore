@@ -1,5 +1,5 @@
-./database/listing/db-files/*
-./database/user-experience/db-files/*
+database/listing/db-files/*
+database/user-experience/db-files/*
 
 # compiled output
 dist
