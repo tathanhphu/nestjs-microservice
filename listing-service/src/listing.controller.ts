@@ -52,4 +52,9 @@ export class ListingController {
     }
     return result;
   }
+
+  @MessagePattern('search_products')
+  public async searchProducts(criterias: any): Promise<IProduct[]> {
+    return await this.listingService.searchProducts(criterias);
+  }
 }

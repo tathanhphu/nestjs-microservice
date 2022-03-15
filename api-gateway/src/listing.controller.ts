@@ -28,11 +28,20 @@ export class ListingController {
   public async createProduct(
     @Body() product: any
   ) {
-    
-    //console.log(`this.logServiceClient: ${this.logServiceClient}`);
     let response = await firstValueFrom(
       this.listingServiceClient.send('create_product', product)
     );
+    return response
+  }
+
+  @Post('/search_products')
+  public async searchProducts(
+    @Body() criteria: any
+  ) {
+
+    let response = await firstValueFrom(
+      this.listingServiceClient.send('search_products', criteria)
+    ); 
     return response
   }
 }

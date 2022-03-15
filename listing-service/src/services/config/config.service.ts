@@ -1,10 +1,10 @@
-import { Transport } from '@nestjs/microservices'
+import { Transport } from '@nestjs/microservices';
 export class ConfigService {
   private readonly envConfig: { [key: string]: any } = null;
 
   constructor() {
     this.envConfig = {
-      port: process.env.LISTING_SERVICE_PORT
+      port: process.env.LISTING_SERVICE_PORT,
     };
     this.envConfig.logService = {
       options: {
@@ -20,9 +20,6 @@ export class ConfigService {
       },
       transport: Transport.TCP,
     };
-    }
-    //this.envConfig.baseUri = process.env.BASE_URI;
-    //this.envConfig.gatewayPort = process.env.API_GATEWAY_PORT;
   }
 
   get(key: string): any {

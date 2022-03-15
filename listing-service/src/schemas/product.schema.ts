@@ -4,6 +4,17 @@ function transformValue(doc, ret: { [key: string]: any }) {
   delete ret._id;
 }
 
+export interface IProductSchema extends mongoose.Document {
+  name: string;
+  description: string;
+  price: number;
+  colour: [{
+    name: string,
+    image: string,
+  }],
+  created_at: Date,
+  updated_at: Date,
+}
 
 export const ProductSchema = new mongoose.Schema(
   {
@@ -14,9 +25,13 @@ export const ProductSchema = new mongoose.Schema(
     description: {
       type: String
     },
+    brand: {
+      type: String,
+      required: [true, 'Brand cannot be empty']
+    },
     price: {
       type: Number,
-      required: [true, 'Price can not be empty']
+      required: [true, 'Price cannot be empty']
     },
     colour:[{
       name: String,

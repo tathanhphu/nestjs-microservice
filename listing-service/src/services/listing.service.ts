@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Model } from 'mongoose'
 import { InjectModel } from '@nestjs/mongoose';
-import { IProduct } from 'src/interfaces/product.interface';
+import { IProduct } from '../interfaces/product.interface';
 @Injectable()
 export class ListingService {
   constructor(
@@ -11,6 +11,10 @@ export class ListingService {
   public async createProduct(product: IProduct): Promise<IProduct> {
     const productModel = new this.productModel(product);
     return await productModel.save();
+  }
+
+  public async searchProducts(criterias: any): Promise<IProduct[]> {
+    return this.productModel.find(criterias).exec();
   }
   
 }
