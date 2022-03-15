@@ -18,18 +18,21 @@ import { ClientProxy } from '@nestjs/microservices';
 @Controller('listing')
 export class ListingController {
   constructor(
-    //@Inject('LISTING_SERVICE') private readonly listingServiceClient: ClientProxy,
+    @Inject('LISTING_SERVICE') private readonly listingServiceClient: ClientProxy,
     @Inject('LOG_SERVICE') private readonly logServiceClient: ClientProxy,
   ) {
     
   }
 
-  @Get()
-  public async getProducts() {
+  @Post('/create_product')
+  public async createProduct(
+    @Body() product: any
+  ) {
+    
     //console.log(`this.logServiceClient: ${this.logServiceClient}`);
-    let response = {}//await firstValueFrom(
-      this.logServiceClient.emit('log_message', 'message from getProducts')
-    //);
-    return 'products ' + JSON.stringify(response);
+    let response = await firstValueFrom(
+      this.listingServiceClient.send('create_product', product)
+    );
+    return response
   }
 }

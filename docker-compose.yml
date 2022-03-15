@@ -13,17 +13,17 @@ services:
       - frontend
     links:
       - log-service
-  # listing-service:
-  #   build: ./listing-service
-  #   restart: always
-  #   hostname: listing-service
-  #   env_file:
-  #     - .env
-  #   networks:
-  #     - backend
-  #   links:
-  #     - db-listing
-  #     - log-service
+  listing-service:
+    build: ./listing-service
+    restart: always
+    hostname: listing-service
+    env_file:
+      - .env
+    networks:
+      - backend
+    links:
+      - db-listing
+      - log-service
   log-service:
     build: ./log-service
     restart: always

@@ -17,14 +17,14 @@ import { ConfigService } from './services/config/config.service';
       },
       inject: [ConfigService],
     },
-    // {
-    //   provide: 'LISTING_SERVICE',
-    //   useFactory: (configService: ConfigService) => {
-    //     const listingServiceOptions = configService.get('listingService');
-    //     return ClientProxyFactory.create(listingServiceOptions);
-    //   },
-    //   inject: [ConfigService],
-    // }
+    {
+      provide: 'LISTING_SERVICE',
+      useFactory: (configService: ConfigService) => {
+        const listingServiceOptions = configService.get('listingService');
+        return ClientProxyFactory.create(listingServiceOptions);
+      },
+      inject: [ConfigService],
+    }
   ],
 })
 export class AppModule {}
