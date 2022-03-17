@@ -1,5 +1,5 @@
 import { IProduct } from "./product.interface";
 import { IBaseResponse } from "./base-response.interface";
-export interface IProductResponse extends IBaseResponse {
-  product?: IProduct,
+export interface IProductSearchResponse extends IBaseResponse {
+  products?: IProduct[],
 }

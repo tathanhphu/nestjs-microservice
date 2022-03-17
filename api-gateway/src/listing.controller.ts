@@ -10,6 +10,7 @@ import {
   Req,
   HttpException,
   HttpStatus,
+  HttpCode,
 } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
 
@@ -18,30 +19,71 @@ import { ClientProxy } from '@nestjs/microservices';
 @Controller('listing')
 export class ListingController {
   constructor(
-    @Inject('LISTING_SERVICE') private readonly listingServiceClient: ClientProxy,
+    @Inject('LISTING_SERVICE')
+    private readonly listingServiceClient: ClientProxy,
     @Inject('LOG_SERVICE') private readonly logServiceClient: ClientProxy,
-  ) {
-    
-  }
+  ) {}
 
   @Post('/create_product')
-  public async createProduct(
-    @Body() product: any
-  ) {
+  public async createProduct(@Body() product: any) {
     let response = await firstValueFrom(
-      this.listingServiceClient.send('create_product', product)
+      this.listingServiceClient.send('create_product', product),
     );
-    return response
+    if (response.status !== HttpStatus.CREATED) {
+      throw new HttpException(
+        {
+          message: response.message,
+          errors: response.errors,
+        },
+        response.status,
+      );
+    }
+    return {
+      product: response.product,
+      message: response.message
+    };
   }
 
   @Post('/search_products')
-  public async searchProducts(
-    @Body() criteria: any
-  ) {
-
+  @HttpCode(HttpStatus.OK)
+  public async searchProducts(@Body() criteria: any) {
+    console.log(criteria)
     let response = await firstValueFrom(
-      this.listingServiceClient.send('search_products', criteria)
-    ); 
-    return response
+      this.listingServiceClient.send('search_products', criteria),
+    );
+    
+    if (response.status !== HttpStatus.OK) {
+      throw new HttpException(
+        {
+          message: response.message,
+          errors: response.errors,
+        },
+        response.status,
+      );
+    }
+    return {
+      products: response.products,
+      message: response.message
+    };
+  }
+
+  @Get('/product/:id')
+  public async getProductById(@Param() params) {
+    let response = await firstValueFrom(
+      this.listingServiceClient.send('get_product_by_id', params.id),
+    );
+    if (response.status !== HttpStatus.OK) {
+      throw new HttpException(
+        {
+          message: response.message,
+          errors: response.errors,
+        },
+        response.status,
+      );
+    }
+    return {
+      product: response.product,
+      message: response.message
+    };
   }
 }

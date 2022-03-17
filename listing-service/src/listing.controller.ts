@@ -1,6 +1,7 @@
-import { Controller, HttpStatus, Inject } from '@nestjs/common';
+import { Controller, HttpException, HttpStatus, Inject } from '@nestjs/common';
 import { ClientProxy, MessagePattern } from '@nestjs/microservices';
-import { IProductCreateResponse } from './interfaces/product-create-response';
+import { IProductResponse } from './interfaces/product-create-response';
+import { IProductSearchResponse } from './interfaces/product-search-response.interface';
 import { IProduct } from './interfaces/product.interface';
 import { ListingService } from './services/listing.service';
 
@@ -14,8 +15,8 @@ export class ListingController {
   @MessagePattern('create_product')
   public async createProduct(
     product: IProduct,
-  ): Promise<IProductCreateResponse> {
-    let result: IProductCreateResponse = null;
+  ): Promise<IProductResponse> {
+    let result: IProductResponse = null;
     try {
       if (product) {
         const createdProduct: IProduct =
@@ -54,7 +55,51 @@ export class ListingController {
   }
 
   @MessagePattern('search_products')
-  public async searchProducts(criterias: any): Promise<IProduct[]> {
-    return await this.listingService.searchProducts(criterias);
+  public async searchProducts(criteria: any): Promise<IProductSearchResponse> {
+    try {
+      console.log(`${JSON.stringify(criteria)}`);
+      if (!criteria) {
+        throw new Error('search body is empty')
+      }
+      const products = await this.listingService.searchProducts(criteria);
+      return {
+        status: HttpStatus.OK,
+        products
+      }  
+    } catch (err) {
+      return {
+        status: HttpStatus.BAD_REQUEST,
+        message: 'search product bad request',
+        errors: err.errors
+      }
+    }
+  }
+
+  @MessagePattern('get_product_by_id')
+  public async getProductById(id: string): Promise<IProductResponse> {
+    let result: IProductResponse;
+
+    if (id && id.match(/^[0-9a-fA-F]{24}$/)) {
+      const product = await this.listingService.searchProductById(id);
+      if (product) {
+        result = {
+          status: HttpStatus.OK,
+          message: 'get_product_by_id_success',
+          product,
+        };
+      } else {
+        result = {
+          status: HttpStatus.NOT_FOUND,
+          message: 'get_product_by_id_not_found',
+        };
+      }
+    } else {
+      result = {
+        status: HttpStatus.BAD_REQUEST,
+        message: 'get_product_by_id_bad_request',
+      };
+    }
+
+    return result;
   }
 }

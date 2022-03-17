@@ -8,8 +8,8 @@ export class LogController {
 
   @MessagePattern('log_message')
   @EventPattern('log_message')
-  public async logMessage(msgObject) {
-    this.logService.logMessage(msgObject)
+  public async logMessage(msgObject, logLevel: 'info' | 'error' | 'warn' = 'info') {
+    this.logService.logMessage(msgObject, logLevel)
   }
   // @Get()
   // getHello(): string {

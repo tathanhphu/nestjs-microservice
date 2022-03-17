@@ -3,7 +3,7 @@ import LOGGER from '../logger';
 @Injectable()
 export class LogService {
   
-  logMessage(msg) {
-    LOGGER.info(msg);
+  logMessage(msg, logLevel: 'info' | 'error' | 'warn') {
+    LOGGER[logLevel](msg);
   }
 }

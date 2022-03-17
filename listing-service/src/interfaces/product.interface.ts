@@ -6,5 +6,6 @@ export interface IProduct extends Document {
   name: string;
   description: string;
   price: number;
-  colour: ProductVariant[]
+  brand: string;
+  variant: ProductVariant[]
 }
