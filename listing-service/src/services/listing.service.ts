@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { IProduct } from '../interfaces/product.interface';
+import { QUERY_FIELD, SEARCH_PARAM } from 'src/interfaces/query.interface';
 
 // const conditions = { and: '$and', or: '$or' };
 // const operators = {
@@ -40,66 +41,27 @@ export class ListingService {
     return this.productModel.findById(id).exec();
   }
 
-  public async searchProducts(q: string): Promise<IProduct[]> {
-    // return this.productModel.find(criteria).exec();
-    // let mongoDbQuery = { $expr: mapRuleSet(criteria) };
-    // console.log(`${JSON.stringify(mongoDbQuery)}`);
-    // let mongoDbQuery = {
-    //   'name': new RegExp('phu'), 
-    //   'price': {
-    //     '$gt': 0
-    //   }, 
-    //   'colour': {
-    //     '$elemMatch': {
-    //       'name': new RegExp('white')
-    //     }
-    //   }
-    // }
-
-    //==
-    // {
-    //   '$or': [
-    //     {
-    //       'name': new RegExp('gu', 'i')
-    //     }, {
-    //       'brand': new RegExp('dsdas')
-    //     }
-    //   ]
-    // }
-    let mongoDbQuery: any = {};
-    // if (q.name) {
-    //   mongoDbQuery = {
-    //     name: new RegExp(q.name, 'i')
-    //   }
-    // }
-    // if (q.priceRange) {
-    //   mongoDbQuery.price = {
-    //     '$gte': q.priceRange.min || 0,
-    //     '$lte': q.priceRange.max
-    //   }
-    // }
-    // if (q.brand) {
-    //   mongoDbQuery.brand = {
-    //     '$in': [q.brand]
-    //   }
-    // }
-    // if (q.colour) {
-    //   mongoDbQuery.colour = {
-    //     '$elemMatch': {
-    //       'name': new RegExp(mongoDbQuery.colour)
-    //      }
-    //   }
-    // }
-    const qeury = {
-      '$and': [
-        {
-          'name': new RegExp('gu', 'i')
-        }, {
-          'brand': new RegExp('gu', 'i')
-        }
-      ]
+  public async searchProducts(searchParam: SEARCH_PARAM | any): Promise<IProduct[]> {
+    let value: any = {};
+    let q: any = {};
+    if (searchParam?.operator) {
+      switch(searchParam.operator) {
+        case 'like': 
+          value = new RegExp(searchParam.value);
+          break;
+        case 'ilike': 
+          value = new RegExp(searchParam.value, 'ig');
+          break;
+        default:
+          value = searchParam.value;
+          break;
+  
+      }  
     }
-    console.log(`${q}`);
-    return this.productModel.find({q}).exec();
+    
+    q[searchParam.field] = value;
+    return this.productModel.find(q).exec();
   }
+
+
 }

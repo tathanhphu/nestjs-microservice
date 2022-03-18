@@ -1,11 +1,22 @@
 import winston = require("winston");
+
 const ERROR_LOG_FILE_LOCATION = process.env.ERROR_LOG_FILE_LOCATION || './logs/error.log';
 const LOG_FILE_LOCATION = process.env.LOG_FILE_LOCATION || './logs/log.log';
 
+const { combine, splat, timestamp, printf, colorize } = winston.format;
+
+const FORMAT = printf( ({ level, message, timestamp}) => {
+  let msg = `${timestamp} [${level}] : ${message} `  
+  return msg
+});
 const LOGGER = winston.createLogger({
   level: 'info',
-  format: winston.format.json(),
-  defaultMeta: { service: 'user-service' },
+  format: combine(
+	  timestamp(),
+    splat(),
+    FORMAT
+  ),
+  
   transports: [
     new winston.transports.File({ filename: ERROR_LOG_FILE_LOCATION, level: 'error' }),
     new winston.transports.File({ filename: LOG_FILE_LOCATION }),

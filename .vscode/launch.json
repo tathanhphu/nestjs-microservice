@@ -5,7 +5,7 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "[debug] Listing",
+      "name": "[Listing]",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceRoot}/listing-service",
@@ -13,7 +13,23 @@
       "runtimeArgs": ["run-script", "start:dev"]
     },
     {
-      "name": "[debug] Gateway",
+      "name": "[Log]",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}/log-service",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "start:dev"]
+    },
+    {
+      "name": "[Listing] test",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}/listing-service",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "test"]
+    },
+    {
+      "name": "[Gateway]",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceRoot}/api-gateway",

@@ -3,9 +3,22 @@ import * as mongoose from 'mongoose';
 function transformValue(doc, ret: { [key: string]: any }) {
   delete ret._id;
 }
+export interface IProductSchema extends mongoose.Document {
+  name: string;
+  description: string;
+  price: number;
+  brand: string;
+  variant:  Array<{
+    color: string,
+    image: string,
+    size: string
+  }>,
+  created_at: Date,
+  updated_at: Date,
+}
 
 
-export const ProductSchema = new mongoose.Schema(
+export const ProductSchema = new mongoose.Schema (
   {
     name: {
       type: String,

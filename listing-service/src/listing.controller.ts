@@ -3,6 +3,7 @@ import { ClientProxy, MessagePattern } from '@nestjs/microservices';
 import { IProductResponse } from './interfaces/product-create-response';
 import { IProductSearchResponse } from './interfaces/product-search-response.interface';
 import { IProduct } from './interfaces/product.interface';
+import { SEARCH_PARAM } from './interfaces/query.interface';
 import { ListingService } from './services/listing.service';
 
 @Controller()
@@ -13,9 +14,7 @@ export class ListingController {
   ) {}
 
   @MessagePattern('create_product')
-  public async createProduct(
-    product: IProduct,
-  ): Promise<IProductResponse> {
+  public async createProduct(product: IProduct): Promise<IProductResponse> {
     let result: IProductResponse = null;
     try {
       if (product) {
@@ -27,7 +26,7 @@ export class ListingController {
           product: createdProduct,
         };
         this.logServiceClient.emit(
-          'log_message',
+          'log_info_message',
           `create product success, productId: ${createdProduct.id}`,
         );
       } else {
@@ -36,7 +35,7 @@ export class ListingController {
           message: 'create product precondition failed',
         };
         this.logServiceClient.emit(
-          'log_message',
+          'log_error_message',
           `create product precondition failed`,
         );
       }
@@ -46,58 +45,71 @@ export class ListingController {
         message: 'create product bad request',
         errors: err.errors,
       };
-      this.logServiceClient.emit(
-        'log_message',
-        `${err.errors}`,
-      );
+      this.logServiceClient.emit('log_error_message', `${err.message}`);
     }
     return result;
   }
 
   @MessagePattern('search_products')
-  public async searchProducts(criteria: any): Promise<IProductSearchResponse> {
+  public async searchProducts(
+    searchParam: SEARCH_PARAM | {},
+  ): Promise<IProductSearchResponse> {
     try {
-      console.log(`${JSON.stringify(criteria)}`);
-      if (!criteria) {
-        throw new Error('search body is empty')
+      if (!searchParam) {
+        throw new Error('search param is empty');
       }
-      const products = await this.listingService.searchProducts(criteria);
+
+      const products = await this.listingService.searchProducts(searchParam);
       return {
         status: HttpStatus.OK,
-        products
-      }  
+        products,
+      };
     } catch (err) {
       return {
         status: HttpStatus.BAD_REQUEST,
         message: 'search product bad request',
-        errors: err.errors
-      }
+        errors: err.errors,
+      };
+    } finally {
+      this.logServiceClient.emit('add_user_experience', {
+        action: 'search_products',
+        action_param: JSON.stringify(searchParam),
+      });
     }
   }
 
   @MessagePattern('get_product_by_id')
   public async getProductById(id: string): Promise<IProductResponse> {
     let result: IProductResponse;
-
-    if (id && id.match(/^[0-9a-fA-F]{24}$/)) {
-      const product = await this.listingService.searchProductById(id);
-      if (product) {
-        result = {
-          status: HttpStatus.OK,
-          message: 'get_product_by_id_success',
-          product,
-        };
+    try {
+      if (id && id.match(/^[0-9a-fA-F]{24}$/)) {
+        const product = await this.listingService.searchProductById(id);
+        if (product) {
+          result = {
+            status: HttpStatus.OK,
+            message: 'get_product_by_id_success',
+            product,
+          };
+        } else {
+          result = {
+            status: HttpStatus.NOT_FOUND,
+            message: 'get_product_by_id_not_found',
+          };
+        }
       } else {
-        result = {
-          status: HttpStatus.NOT_FOUND,
-          message: 'get_product_by_id_not_found',
-        };
+        throw new Error('get_product_by_id invalid product id format')
       }
-    } else {
+    } catch (err) {
       result = {
         status: HttpStatus.BAD_REQUEST,
         message: 'get_product_by_id_bad_request',
+        errors: err
       };
+    } finally {
+      this.logServiceClient.emit('add_user_experience', {
+        action: 'search_product_by_id',
+        action_param: id,
+      });
     }
 
     return result;
