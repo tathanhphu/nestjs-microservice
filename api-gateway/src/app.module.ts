@@ -1,11 +1,12 @@
 import { Module } from '@nestjs/common';
 import { ClientProxyFactory } from '@nestjs/microservices';
-import { ListingController } from './product.controller';
+import { UserActivityController } from './log.controller';
+import { ProductController } from './product.controller';
 import { ConfigService } from './services/config/config.service';
 
 @Module({
   imports: [],
-  controllers: [ListingController],
+  controllers: [ProductController, UserActivityController],
   providers: [
     ConfigService,
     {
@@ -24,7 +25,7 @@ import { ConfigService } from './services/config/config.service';
         return ClientProxyFactory.create(listingServiceOptions);
       },
       inject: [ConfigService],
-    }
+    },
   ],
 })
 export class AppModule {}

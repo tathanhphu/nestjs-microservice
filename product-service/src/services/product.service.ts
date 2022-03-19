@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { IProduct } from '../interfaces/product.interface';
-import { QUERY_FIELD, SEARCH_PARAM } from 'src/interfaces/query.interface';
+import { SEARCH_PARAM } from 'src/interfaces/query.interface';
 
 // const conditions = { and: '$and', or: '$or' };
 // const operators = {
@@ -41,27 +41,26 @@ export class ProductService {
     return this.productModel.findById(id).exec();
   }
 
-  public async searchProducts(searchParam: SEARCH_PARAM | any): Promise<IProduct[]> {
+  public async searchProducts(
+    searchParam: SEARCH_PARAM | any,
+  ): Promise<IProduct[]> {
     let value: any = {};
-    let q: any = {};
+    const q: any = {};
     if (searchParam?.operator) {
-      switch(searchParam.operator) {
-        case 'like': 
+      switch (searchParam.operator) {
+        case 'like':
           value = new RegExp(searchParam.value);
           break;
-        case 'ilike': 
+        case 'ilike':
           value = new RegExp(searchParam.value, 'ig');
           break;
         default:
           value = searchParam.value;
           break;
-  
-      }  
+      }
     }
-    
+
     q[searchParam.field] = value;
     return this.productModel.find(q).exec();
   }
-
-
 }

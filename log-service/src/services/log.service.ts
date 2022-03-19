@@ -6,20 +6,24 @@ import LOGGER from '../logger';
 @Injectable()
 export class LogService {
   constructor(
-    @InjectModel('UserExperience') private readonly userExperienceModel: Model<IUserExperience>
+    @InjectModel('UserExperience')
+    private readonly userExperienceModel: Model<IUserExperience>,
   ) {}
-  
+
   logMessage(logLevel: 'info' | 'error' | 'warn', msg) {
     LOGGER[logLevel](msg);
-   
   }
 
-  public async createUserLog(userLog: IUserExperience): Promise<IUserExperience> {
+  public async createUserLog(
+    userLog: IUserExperience,
+  ): Promise<IUserExperience> {
     const userExperienceModel = new this.userExperienceModel(userLog);
     return await userExperienceModel.save();
   }
 
-  public async getUserLogs(): Promise<IUserExperience[]> {
-    return this.userExperienceModel.find().exec(); 
+  public async getUserLogs(params: {
+    action: string;
+  }): Promise<IUserExperience[]> {
+    return this.userExperienceModel.find().exec();
   }
 }

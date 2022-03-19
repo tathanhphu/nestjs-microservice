@@ -1,9 +1,12 @@
-import { MongooseModuleOptions, MongooseOptionsFactory } from '@nestjs/mongoose';
+import {
+  MongooseModuleOptions,
+  MongooseOptionsFactory,
+} from '@nestjs/mongoose';
 
 export class MongoConfigService implements MongooseOptionsFactory {
   createMongooseOptions(): MongooseModuleOptions {
     return {
-      uri: process.env.MONGO_USER_EXPERIENCE_DSN
-    }
+      uri: process.env.MONGO_USER_EXPERIENCE_DSN,
+    };
   }
 }

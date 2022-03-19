@@ -3,11 +3,8 @@ import {
   Inject,
   Get,
   Post,
-  Put,
-  Delete,
   Param,
   Body,
-  Req,
   HttpException,
   HttpStatus,
   HttpCode,
@@ -17,7 +14,7 @@ import { firstValueFrom } from 'rxjs';
 import { ClientProxy } from '@nestjs/microservices';
 
 @Controller('product')
-export class ListingController {
+export class ProductController {
   constructor(
     @Inject('PRODUCT_SERVICE')
     private readonly listingServiceClient: ClientProxy,
@@ -26,7 +23,7 @@ export class ListingController {
 
   @Post('/create_product')
   public async createProduct(@Body() product: any) {
-    let response = await firstValueFrom(
+    const response = await firstValueFrom(
       this.listingServiceClient.send('create_product', product),
     );
     if (response.status !== HttpStatus.CREATED) {
@@ -40,18 +37,18 @@ export class ListingController {
     }
     return {
       product: response.product,
-      message: response.message
+      message: response.message,
     };
   }
 
   @Post('/search_products')
   @HttpCode(HttpStatus.OK)
   public async searchProducts(@Body() criteria: any) {
-    console.log(criteria)
-    let response = await firstValueFrom(
+    console.log(criteria);
+    const response = await firstValueFrom(
       this.listingServiceClient.send('search_products', criteria),
     );
-    
+
     if (response.status !== HttpStatus.OK) {
       throw new HttpException(
         {
@@ -63,13 +60,13 @@ export class ListingController {
     }
     return {
       products: response.products,
-      message: response.message
+      message: response.message,
     };
   }
 
   @Get('/product/:id')
   public async getProductById(@Param() params) {
-    let response = await firstValueFrom(
+    const response = await firstValueFrom(
       this.listingServiceClient.send('get_product_by_id', params.id),
     );
     if (response.status !== HttpStatus.OK) {
@@ -83,7 +80,7 @@ export class ListingController {
     }
     return {
       product: response.product,
-      message: response.message
+      message: response.message,
     };
   }
 }

@@ -10,38 +10,38 @@ import { ProductService } from './services/product.service';
 @Module({
   imports: [
     MongooseModule.forRootAsync({
-      useClass: MongoConfigService
+      useClass: MongoConfigService,
     }),
     MongooseModule.forFeature([
       {
         name: 'Product',
         schema: ProductSchema,
-        collection: 'products'
-      }
-    ])
+        collection: 'products',
+      },
+    ]),
   ],
   controllers: [ListingController],
   providers: [
     ProductService,
-    ConfigService, 
+    ConfigService,
     {
       provide: 'LOG_SERVICE',
       useFactory: (configService: ConfigService) => {
         const logServiceOptions = configService.get('logService');
-        return ClientProxyFactory.create(logServiceOptions)
+        return ClientProxyFactory.create(logServiceOptions);
       },
-      inject: [ConfigService]
-    }, 
+      inject: [ConfigService],
+    },
     {
       provide: 'USER_EXPERIENCE_SERVICE',
       useFactory: (configService: ConfigService) => {
-        const userExperienceServiceOptions = configService.get('userExperienceService');
-        return ClientProxyFactory.create(userExperienceServiceOptions)
+        const userExperienceServiceOptions = configService.get(
+          'userExperienceService',
+        );
+        return ClientProxyFactory.create(userExperienceServiceOptions);
       },
-      inject: [ConfigService]
-    }
-    
-  
+      inject: [ConfigService],
+    },
   ],
 })
 export class ProductModule {}

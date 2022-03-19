@@ -1,16 +1,24 @@
-import { Body, Controller, Get, HttpException, HttpStatus, Inject, Post } from "@nestjs/common";
-import { ClientProxy } from "@nestjs/microservices";
-import { firstValueFrom } from "rxjs";
+import {
+  Controller,
+  Get,
+  HttpException,
+  HttpStatus,
+  Inject,
+} from '@nestjs/common';
+import { ClientProxy } from '@nestjs/microservices';
+import { firstValueFrom } from 'rxjs';
 
 @Controller('user-activities')
 export class UserActivityController {
   constructor(
-    @Inject ('LOG_SERVICE') private readonly logServiceClient: ClientProxy
+    @Inject('LOG_SERVICE') private readonly logServiceClient: ClientProxy,
   ) {}
 
   @Get('/')
   public async getUserActivities() {
-    const response = await firstValueFrom(this.logServiceClient.send('get_user_experience', {}));
+    const response = await firstValueFrom(
+      this.logServiceClient.send('get_user_experience', {}),
+    );
     if (response.status !== HttpStatus.OK) {
       throw new HttpException(
         {
@@ -22,7 +30,7 @@ export class UserActivityController {
     }
     return {
       userExperiences: response.userExperiences,
-      message: response.message
+      message: response.message,
     };
   }
 }

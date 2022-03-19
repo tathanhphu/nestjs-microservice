@@ -6,6 +6,6 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const port = new ConfigService().get('port');
   await app.listen(port);
-  console.log(`[API gateway] is listenning on port ${port}`)
+  console.log(`[API gateway] is listenning on port ${port}`);
 }
 bootstrap();

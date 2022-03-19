@@ -4,7 +4,6 @@ function transformValue(doc, ret: { [key: string]: any }) {
   delete ret._id;
 }
 
-
 export const UserExperienceSchema = new mongoose.Schema(
   {
     action: {
@@ -15,7 +14,7 @@ export const UserExperienceSchema = new mongoose.Schema(
       type: String,
       required: [true, `User's action param can not be empty`],
     },
-    created_at:{ type: Date, default: Date.now },
+    created_at: { type: Date, default: Date.now },
   },
   {
     toObject: {

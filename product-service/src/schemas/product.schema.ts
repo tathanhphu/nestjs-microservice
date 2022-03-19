@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
- 
+
 function transformValue(doc, ret: { [key: string]: any }) {
   delete ret._id;
 }
@@ -8,40 +8,41 @@ export interface IProductSchema extends mongoose.Document {
   description: string;
   price: number;
   brand: string;
-  variant:  Array<{
-    color: string,
-    image: string,
-    size: string
-  }>,
-  created_at: Date,
-  updated_at: Date,
+  variant: Array<{
+    color: string;
+    image: string;
+    size: string;
+  }>;
+  created_at: Date;
+  updated_at: Date;
 }
 
-
-export const ProductSchema = new mongoose.Schema (
+export const ProductSchema = new mongoose.Schema(
   {
     name: {
       type: String,
       required: [true, 'Product name can not be empty'],
     },
     description: {
-      type: String
+      type: String,
     },
     brand: {
       type: String,
-      required: [true, 'Brand cannot be empty']
+      required: [true, 'Brand cannot be empty'],
     },
     price: {
       type: Number,
-      required: [true, 'Price cannot be empty']
+      required: [true, 'Price cannot be empty'],
     },
-    variant:[{
-      color: String,
-      image: String,
-      size: String,
-    }],
-    created_at:{ type: Date },
-    updated_at:{ type: Date, default: Date.now },
+    variant: [
+      {
+        color: String,
+        image: String,
+        size: String,
+      },
+    ],
+    created_at: { type: Date },
+    updated_at: { type: Date, default: Date.now },
   },
   {
     toObject: {

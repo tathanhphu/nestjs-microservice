@@ -1,4 +1,4 @@
-import { Controller, HttpException, HttpStatus, Inject } from '@nestjs/common';
+import { Controller, HttpStatus, Inject } from '@nestjs/common';
 import { ClientProxy, MessagePattern } from '@nestjs/microservices';
 import { IProductResponse } from './interfaces/product-create-response';
 import { IProductSearchResponse } from './interfaces/product-search-response.interface';
@@ -52,7 +52,7 @@ export class ListingController {
 
   @MessagePattern('search_products')
   public async searchProducts(
-    searchParam: SEARCH_PARAM | {},
+    searchParam: SEARCH_PARAM | any,
   ): Promise<IProductSearchResponse> {
     try {
       if (!searchParam) {
@@ -97,13 +97,13 @@ export class ListingController {
           };
         }
       } else {
-        throw new Error('get_product_by_id invalid product id format')
+        throw new Error('get_product_by_id invalid product id format');
       }
     } catch (err) {
       result = {
         status: HttpStatus.BAD_REQUEST,
         message: 'get_product_by_id_bad_request',
-        errors: err
+        errors: err,
       };
     } finally {
       this.logServiceClient.emit('add_user_experience', {

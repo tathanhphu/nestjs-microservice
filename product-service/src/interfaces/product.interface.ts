@@ -7,5 +7,5 @@ export interface IProduct extends Document {
   description: string;
   price: number;
   brand: string;
-  variant: ProductVariant[]
+  variant: ProductVariant[];
 }
