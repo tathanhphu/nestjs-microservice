@@ -5,10 +5,10 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "[Listing]",
+      "name": "[Product]",
       "type": "node",
       "request": "launch",
-      "cwd": "${workspaceRoot}/listing-service",
+      "cwd": "${workspaceRoot}/product-service",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run-script", "start:dev"]
     },
@@ -21,10 +21,10 @@
       "runtimeArgs": ["run-script", "start:dev"]
     },
     {
-      "name": "[Listing] test",
+      "name": "[Product] test",
       "type": "node",
       "request": "launch",
-      "cwd": "${workspaceRoot}/listing-service",
+      "cwd": "${workspaceRoot}/product-service",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run-script", "test"]
     },

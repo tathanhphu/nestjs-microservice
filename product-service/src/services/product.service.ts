@@ -27,7 +27,7 @@ import { QUERY_FIELD, SEARCH_PARAM } from 'src/interfaces/query.interface';
 // };
 
 @Injectable()
-export class ListingService {
+export class ProductService {
   constructor(
     @InjectModel('Product') private readonly productModel: Model<IProduct>,
   ) {}

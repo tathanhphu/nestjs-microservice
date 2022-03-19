@@ -5,7 +5,6 @@ This example is basically an API for ecommerce application. It provides a possib
 Execute `docker network create infrastructure && cp .env.example .env && docker-compose up -d` from the root of the repository
 ## Brief architecture overview
 This API showcase consists of the following parts:
-- Listing service - responsible for search products
-- Log service - responsible for centralize log of microservices
-- User expericence service - responsible for tracking user's actions
+- Product service - responsible for search products
+- Log service - responsible for tracking user's actions, and centralize log of microservices
 - The service interact via **TCP sockets**

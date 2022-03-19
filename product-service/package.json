@@ -1,8 +1,8 @@
 {
-  "name": "log-service",
+  "name": "product-service",
   "private": true,
   "version": "1.0.0",
-  "description": "Log microservice",
+  "description": "Product microservice",
   "license": "MIT",
   "scripts": {
     "prebuild": "rimraf dist",

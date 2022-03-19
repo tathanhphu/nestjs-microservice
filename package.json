@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "lint": "npm --prefix listing-service run lint && npm --prefix log-service run lint && npm --prefix api-gateway run lint"
+    "lint": "npm --prefix product-service run lint && npm --prefix log-service run lint && npm --prefix api-gateway run lint"
   },
   "repository": {
     "type": "git",

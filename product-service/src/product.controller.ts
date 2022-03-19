@@ -4,12 +4,12 @@ import { IProductResponse } from './interfaces/product-create-response';
 import { IProductSearchResponse } from './interfaces/product-search-response.interface';
 import { IProduct } from './interfaces/product.interface';
 import { SEARCH_PARAM } from './interfaces/query.interface';
-import { ListingService } from './services/listing.service';
+import { ProductService } from './services/product.service';
 
 @Controller()
 export class ListingController {
   constructor(
-    private readonly listingService: ListingService,
+    private readonly productService: ProductService,
     @Inject('LOG_SERVICE') private readonly logServiceClient: ClientProxy,
   ) {}
 
@@ -19,7 +19,7 @@ export class ListingController {
     try {
       if (product) {
         const createdProduct: IProduct =
-          await this.listingService.createProduct(product);
+          await this.productService.createProduct(product);
         result = {
           status: HttpStatus.CREATED,
           message: 'create product success',
@@ -59,7 +59,7 @@ export class ListingController {
         throw new Error('search param is empty');
       }
 
-      const products = await this.listingService.searchProducts(searchParam);
+      const products = await this.productService.searchProducts(searchParam);
       return {
         status: HttpStatus.OK,
         products,
@@ -83,7 +83,7 @@ export class ListingController {
     let result: IProductResponse;
     try {
       if (id && id.match(/^[0-9a-fA-F]{24}$/)) {
-        const product = await this.listingService.searchProductById(id);
+        const product = await this.productService.searchProductById(id);
         if (product) {
           result = {
             status: HttpStatus.OK,

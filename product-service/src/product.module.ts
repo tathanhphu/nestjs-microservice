@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { ClientProxyFactory } from '@nestjs/microservices';
 import { MongooseModule } from '@nestjs/mongoose';
-import { ListingController } from './listing.controller';
+import { ListingController } from './product.controller';
 import { ProductSchema } from './schemas/product.schema';
 import { ConfigService } from './services/config/config.service';
 import { MongoConfigService } from './services/config/mongo-config.service';
-import { ListingService } from './services/listing.service';
+import { ProductService } from './services/product.service';
 
 @Module({
   imports: [
@@ -22,7 +22,7 @@ import { ListingService } from './services/listing.service';
   ],
   controllers: [ListingController],
   providers: [
-    ListingService,
+    ProductService,
     ConfigService, 
     {
       provide: 'LOG_SERVICE',
@@ -44,4 +44,4 @@ import { ListingService } from './services/listing.service';
   
   ],
 })
-export class ListingModule {}
+export class ProductModule {}

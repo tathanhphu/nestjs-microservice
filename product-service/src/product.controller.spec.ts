@@ -1,6 +1,6 @@
 import { Test, } from '@nestjs/testing';
-import { ListingController } from './listing.controller';
-import { ListingService } from './services/listing.service';
+import { ListingController } from './product.controller';
+import { ProductService } from './services/product.service';
 import {ModuleMocker, MockFunctionMetadata} from 'jest-mock'
 import { getModelToken } from '@nestjs/mongoose';
 const moduleMocker = new ModuleMocker(global);
@@ -41,14 +41,14 @@ class FakeProductModel  {
 };
 
 describe('ListingController', () => {
-  let listingController: ListingController;
-  let listingService: ListingService;
+  let productController: ListingController;
+  let productService: ProductService;
 
   beforeEach(async () => {
     
     const moduleRef = await Test.createTestingModule({
       controllers: [ListingController],
-      providers: [ListingService, 
+      providers: [ProductService, 
         {
           provide: getModelToken('Product'),
           useValue: FakeProductModel
@@ -71,13 +71,13 @@ describe('ListingController', () => {
     })
     .compile();
 
-    listingService = moduleRef.get<ListingService>(ListingService);
-    listingController = moduleRef.get<ListingController>(ListingController);
+    productService = moduleRef.get<ProductService>(ProductService);
+    productController = moduleRef.get<ListingController>(ListingController);
   });
 
   describe('insert product', () => {
     it('should insert a product', async () => {
-      let response = await listingController.createProduct(results[0])
+      let response = await productController.createProduct(results[0])
       return expect(response.product.name).toBe(results[0].name);  
       
     });
@@ -86,7 +86,7 @@ describe('ListingController', () => {
   describe('searchProducts', () => {
     it('should return an array of products', async () => {
       
-      const response = await listingController.searchProducts({});
+      const response = await productController.searchProducts({});
       await expect(response.products).toHaveLength(1);
     });
     return;

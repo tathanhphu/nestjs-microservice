@@ -4,7 +4,7 @@ export class ConfigService {
 
   constructor() {
     this.envConfig = {
-      port: process.env.LISTING_SERVICE_PORT,
+      port: process.env.PRODUCT_SERVICE_PORT,
     };
     this.envConfig.logService = {
       options: {

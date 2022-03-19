@@ -16,10 +16,10 @@ import { firstValueFrom } from 'rxjs';
 
 import { ClientProxy } from '@nestjs/microservices';
 
-@Controller('listing')
+@Controller('product')
 export class ListingController {
   constructor(
-    @Inject('LISTING_SERVICE')
+    @Inject('PRODUCT_SERVICE')
     private readonly listingServiceClient: ClientProxy,
     @Inject('LOG_SERVICE') private readonly logServiceClient: ClientProxy,
   ) {}
