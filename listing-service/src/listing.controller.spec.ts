@@ -1,13 +1,8 @@
 import { Test, } from '@nestjs/testing';
-import { IProduct } from './interfaces/product.interface';
 import { ListingController } from './listing.controller';
-import { IProductSchema } from './schemas/product.schema';
 import { ListingService } from './services/listing.service';
-import {ModuleMocker, MockFunctionMetadata, fn} from 'jest-mock'
-import { ListingModule } from './listing.module';
-import { Model } from 'mongoose';
-import { MongooseModule } from '@nestjs/mongoose';
-import { MongoConfigService } from './services/config/mongo-config.service';
+import {ModuleMocker, MockFunctionMetadata} from 'jest-mock'
+import { getModelToken } from '@nestjs/mongoose';
 const moduleMocker = new ModuleMocker(global);
 
 const results: any[] = [
@@ -31,30 +26,42 @@ const results: any[] = [
     id: '6231b8ba71d8693493f0862f',
   },
 ];
+class FakeProductModel  {
+  
+  static find() {
+    return {
+      exec: () => {
+        return results;
+      }
+    };
+  };
+  save = () => {
+    return results[0];
+  }
+};
+
 describe('ListingController', () => {
   let listingController: ListingController;
   let listingService: ListingService;
-
-  
 
   beforeEach(async () => {
     
     const moduleRef = await Test.createTestingModule({
       controllers: [ListingController],
-      providers: [ListingService],
-      imports: [ListingModule ,
-      MongooseModule.forRootAsync({
-        useClass: MongoConfigService
-      })
+      providers: [ListingService, 
+        {
+          provide: getModelToken('Product'),
+          useValue: FakeProductModel
+        }
       ],
-
+      imports: [],
     })
     .useMocker((token) => {
-      if (token === 'ProductModel') {
-        return {exec: jest.fn().mockResolvedValue(results)};
-      }
+      
       if (token === 'LOG_SERVICE') {
-        return {};
+        return {
+          emit:jest.fn().mockResolvedValue({})
+        };
       }
       if (typeof token === 'function') {
         const mockMetadata = moduleMocker.getMetadata(token) as MockFunctionMetadata<any, any>;
@@ -77,11 +84,10 @@ describe('ListingController', () => {
   });
 
   describe('searchProducts', () => {
-    fit('should return an array of products', async () => {
+    it('should return an array of products', async () => {
       
       const response = await listingController.searchProducts({});
-      console.log(`RESPONSE:` + JSON.stringify(response));
-      return expect(response.products.length).toBeGreaterThan(0);
+      await expect(response.products).toHaveLength(1);
     });
     return;
   });
