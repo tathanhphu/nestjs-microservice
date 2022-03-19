@@ -44,7 +44,6 @@ export class ProductController {
   @Post('/search_products')
   @HttpCode(HttpStatus.OK)
   public async searchProducts(@Body() criteria: any) {
-    console.log(criteria);
     const response = await firstValueFrom(
       this.listingServiceClient.send('search_products', criteria),
     );

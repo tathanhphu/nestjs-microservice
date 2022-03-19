@@ -13,7 +13,6 @@ import { ConfigService } from './services/config/config.service';
       provide: 'LOG_SERVICE',
       useFactory: (configService: ConfigService) => {
         const logServiceOptions = configService.get('logService');
-        console.log(`logServiceOptions: ${JSON.stringify(logServiceOptions)}`);
         return ClientProxyFactory.create(logServiceOptions);
       },
       inject: [ConfigService],

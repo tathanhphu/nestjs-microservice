@@ -41,11 +41,15 @@ export class ProductService {
     return this.productModel.findById(id).exec();
   }
 
-  public async searchProducts(
-    searchParam: SEARCH_PARAM | any,
-  ): Promise<IProduct[]> {
-    let value: any = {};
+  public async searchProducts(searchParam: SEARCH_PARAM): Promise<IProduct[]> {
     const q: any = {};
+    q[searchParam.field] = this.buildQuery(searchParam);;
+    const sortBy = this.buildOrderBy(searchParam);
+    return this.productModel.find(q).sort(sortBy).exec();
+  }
+
+  private buildQuery(searchParam: SEARCH_PARAM) {
+    let value: any = {};
     if (searchParam?.operator) {
       switch (searchParam.operator) {
         case 'like':
@@ -54,13 +58,46 @@ export class ProductService {
         case 'ilike':
           value = new RegExp(searchParam.value, 'ig');
           break;
+        case '>':
+          value = {
+            $gt: +searchParam.value,
+          };
+          break;
+        case '>=':
+          value = {
+            $gte: +searchParam.value,
+          };
+          break;
+        case '<':
+          value = {
+            $lt: +searchParam.value,
+          };
+          break;
+        case '<=':
+          value = {
+            $lte: +searchParam.value,
+          };
+          break;
+        case 'range':
+          value = {
+            $lte: +searchParam.value.max,
+            $gte: +searchParam.value.min
+          }
+          break;
         default:
           value = searchParam.value;
           break;
       }
+      return value;
     }
+  }
 
-    q[searchParam.field] = value;
-    return this.productModel.find(q).exec();
+  private buildOrderBy(searchParam: SEARCH_PARAM) {
+    let sort: any = {}
+    if (searchParam.sortBy) {
+      sort[searchParam.sortBy.field] = searchParam.sortBy.order === 'desc' ? -1 : 1;
+      return sort;
+    }
+    return null;
   }
 }
