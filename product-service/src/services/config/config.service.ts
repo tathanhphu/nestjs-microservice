@@ -13,13 +13,7 @@ export class ConfigService {
       },
       transport: Transport.TCP,
     };
-    this.envConfig.userExperienceService = {
-      options: {
-        port: process.env.USER_EXPERIENCE_SERVICE_PORT,
-        host: process.env.USER_EXPERIENCE_SERVICE_HOST,
-      },
-      transport: Transport.TCP,
-    };
+    
   }
 
   get(key: string): any {

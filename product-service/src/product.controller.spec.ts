@@ -43,7 +43,7 @@ describe('ListingController', () => {
   let productController: ListingController;
   //let productService: ProductService;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       controllers: [ListingController],
       providers: [
@@ -75,7 +75,7 @@ describe('ListingController', () => {
     productController = moduleRef.get<ListingController>(ListingController);
   });
 
-  describe('insert product', () => {
+  describe('insert a product', () => {
     it('should insert a product', async () => {
       const response = await productController.createProduct(results[0]);
       return expect(response.product.name).toBe(results[0].name);
@@ -89,4 +89,5 @@ describe('ListingController', () => {
     });
     return;
   });
+
 });

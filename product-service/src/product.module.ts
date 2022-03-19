@@ -32,16 +32,6 @@ import { ProductService } from './services/product.service';
       },
       inject: [ConfigService],
     },
-    {
-      provide: 'USER_EXPERIENCE_SERVICE',
-      useFactory: (configService: ConfigService) => {
-        const userExperienceServiceOptions = configService.get(
-          'userExperienceService',
-        );
-        return ClientProxyFactory.create(userExperienceServiceOptions);
-      },
-      inject: [ConfigService],
-    },
   ],
 })
 export class ProductModule {}
