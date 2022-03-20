@@ -1,6 +1,6 @@
 # This repository shows how you can build API with microservice architecture using nestjs
 ## Features of this example
-This example is basically an API for ecommerce application. It provides a possibility to perform searching products based on color, name, brand ...
+This example is basically an API for ecommerce application. It provides a possibility to perform searching products based on color, name, brand, price ...
 ## Running the example with docker-compose
 
 Execute command below from the root of the repository
@@ -82,7 +82,6 @@ curl --location --request POST 'http://localhost:8000/product/search_products' \
   "operator": "ilike",
   "value": "shirt"
 }'
-
 ```
 
 ## Search products by color
@@ -114,5 +113,5 @@ curl --location --request POST 'http://localhost:8000/product/search_products' \
 ```
 **Notes:** *sortBy* object is optional
 ## Points to extents: 
-1. Only limited search criteria and operations has been supported
+1. Only limited search criteria and operators ('like' | '=' | 'ilike' | '>' | '<' | '>=' | '<=' | 'range') has been supported
 2. ...
