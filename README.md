@@ -67,7 +67,7 @@ curl --location --request POST 'http://localhost:8000/product/search_products' \
   "field": "name",
   "operator": "ilike",
   "value": "shirt"
-}
+}'
 
 ```
 
@@ -79,7 +79,7 @@ curl --location --request POST 'http://localhost:8000/product/search_products' \
     "field": "variant.color",
     "operator": "=",
     "value": "pink"
-}
+}'
 ```
 ## Search products by price
 ```
@@ -89,7 +89,7 @@ curl --location --request POST 'http://localhost:8000/product/search_products' \
     "field": "price",
     "operator": "<=",
     "value": 434234
-}
+}'
 ```
 
 ## Points to extents: 
