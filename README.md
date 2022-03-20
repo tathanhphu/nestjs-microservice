@@ -15,9 +15,9 @@ cp .env.example .env && docker-compose up -d
 
 ## Brief architecture overview
 This API showcase consists of the following parts:
+- API Gateway - distribute requests to relevant services
 - Product service - responsible for search products
 - Log service - responsible for tracking user's actions, and centralize log of microservices
-- API Gateway - distribute requests to relevant services
 - Inter-service communication support synchronous (request-response) and asynchornous (event-based)
 - The service interact via **TCP sockets**
 # Diagrams
@@ -47,7 +47,7 @@ cp .env.test.example .env.test && docker-compose -f ./docker-compose.test.yml up
 npm run test:e2e
 ```
 
-# API
+# APIs
 ## Create a product
 ```
 curl --location --request POST 'http://localhost:8000/product/create_product' \
@@ -73,7 +73,6 @@ curl --location --request POST 'http://localhost:8000/product/create_product' \
 ```
 
 ## Search product by name
-
 ```
 curl --location --request POST 'http://localhost:8000/product/search_products' \
 --header 'Content-Type: application/json' \
@@ -94,6 +93,7 @@ curl --location --request POST 'http://localhost:8000/product/search_products' \
     "value": "pink"
 }'
 ```
+
 ## Search products by price
 ```
 curl --location --request POST 'http://localhost:8000/product/search_products' \
@@ -112,6 +112,11 @@ curl --location --request POST 'http://localhost:8000/product/search_products' \
 }'
 ```
 **Notes:** *sortBy* object is optional
+
+## Get user's activity
+```
+curl --location --request GET 'http://localhost:8000/user-activities'
+```
 ## Points to extents: 
-1. Only limited search criteria and operators ('like' | '=' | 'ilike' | '>' | '<' | '>=' | '<=' | 'range') has been supported
+1. Only limited search criteria and operators (like, ilike, =, >, <, >=, <=, range)  has been supported
 2. ...
