@@ -4,28 +4,6 @@ import { InjectModel } from '@nestjs/mongoose';
 import { IProduct } from '../interfaces/product.interface';
 import { SEARCH_PARAM } from 'src/interfaces/query.interface';
 
-// const conditions = { and: '$and', or: '$or' };
-// const operators = {
-//   '=': '$eq',
-//   '!=': '$ne',
-//   '<': '$lt',
-//   '<=': '$lte',
-//   '>': '$gt',
-//   '>=': '$gte',
-// };
-
-// const mapRule = (rule) => ({
-//   [operators[rule.operator]]: ['$' + rule.field, rule.value],
-// });
-
-// const mapRuleSet = (ruleSet) => {
-//   return {
-//     [conditions[ruleSet.condition]]: ruleSet.rules.map((rule) =>
-//       rule.operator ? mapRule(rule) : mapRuleSet(rule),
-//     ),
-//   };
-// };
-
 @Injectable()
 export class ProductService {
   constructor(

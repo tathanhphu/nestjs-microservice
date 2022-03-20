@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "lint": "npm --prefix product-service run lint && npm --prefix log-service run lint && npm --prefix api-gateway run lint",
-    "test": "npm --prefix product-service run test && npm --prefix log-service run test && npm --prefix api-gateway run test"
+    "test": "npm --prefix product-service run test && npm --prefix log-service run test && npm --prefix api-gateway run test",
+    "test:e2e": "npm --prefix product-service run test:e2e && npm --prefix log-service run test:e2e && npm --prefix api-gateway run test:e2e"
   },
   "repository": {
     "type": "git",

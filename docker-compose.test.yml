@@ -5,7 +5,7 @@ services:
     restart: always
     hostname: product-service
     env_file:
-      - .env
+      - .env.test
     networks:
       - backend
     links:
@@ -18,11 +18,11 @@ services:
     restart: always
     hostname: log-service
     env_file:
-      - .env
+      - .env.test
     networks:
       - backend
     links:
-      - db
+      - db-user-experience
     ports:
       - ${LOG_SERVICE_PORT}:${LOG_SERVICE_PORT}
   db-product:

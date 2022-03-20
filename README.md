@@ -28,9 +28,23 @@ This API showcase consists of the following parts:
 ![alt text](images/search-products.png)
 
 # Testing
+## Unit test
 Implemented a simple unit test to demonstrate testing controller class with mock mongo model (product-service)
 ```
 npm run test
+```
+
+## e2e test
+An sample of e2e test for creating a product
+
+1. Launch services for integration testing, execute command at root of the repository
+```
+cp .env.test.example .env.test && docker-compose -f ./docker-compose.test.yml up -d
+```
+2. Execute e2e testing command at api-gateway folder
+
+```
+npm run test:e2e
 ```
 
 # API
@@ -86,12 +100,19 @@ curl --location --request POST 'http://localhost:8000/product/search_products' \
 curl --location --request POST 'http://localhost:8000/product/search_products' \
 --header 'Content-Type: application/json' \
 --data-raw '{
-    "field": "price",
-    "operator": "<=",
-    "value": 434234
+  "field": "price",
+  "operator": "range",
+  "value": {
+      "min": 500,
+      "max": 700
+  },
+  "sortBy": {
+      "field": "name",
+      "order": "asc"
+  }
 }'
 ```
-
+**Notes:** *sortBy* object is optional
 ## Points to extents: 
 1. Only limited search criteria and operations has been supported
 2. ...
